@@ -11,7 +11,7 @@ class CountryController extends Controller
 
     public function list($id)
     {
-        $country = Country::find($id)->load('states','cities');
+        $country = Country::findOrFailOrFail($id)->load('states','cities');
         return ok('Country',$country);
     }
 
@@ -30,7 +30,7 @@ class CountryController extends Controller
 
     public function update($id, Request $request)
     {
-        $country = Country::find($id);
+        $country = Country::findOrFail($id);
 
         $validaiton = Validator::make($request->all(), [
             'name'  => 'required|unique:countries,name,' . $country->id
@@ -45,14 +45,14 @@ class CountryController extends Controller
 
     public function delete($id)
     {
-        $country = Country::find($id);
+        $country = Country::findOrFail($id);
         $country->delete();
         return ok('Country Deleted Successfully');
     }
 
     public function show($id)
     {
-        $country = Country::find($id);
+        $country = Country::findOrFail($id);
         return ok('Country Detail', $country);
     }
 }

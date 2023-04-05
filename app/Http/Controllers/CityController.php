@@ -10,7 +10,7 @@ class CityController extends Controller
 {
     public function list($id)
     {
-        $city = City::find($id);
+        $city = City::findOrFail($id);
         return ok('City', $city);
     }
 
@@ -30,7 +30,7 @@ class CityController extends Controller
 
     public function update($id, Request $request)
     {
-        $city = City::find($id);
+        $city = City::findOrFail($id);
 
         $validaiton = Validator::make($request->all(), [
             'name'          => 'required|unique:cities,name,' . $city->id,
@@ -45,14 +45,14 @@ class CityController extends Controller
 
     public function delete($id)
     {
-        $city = City::find($id);
+        $city = City::findOrFail($id);
         $city->delete();
         return ok('City Deleted Successfully');
     }
 
     public function show($id)
     {
-        $city = City::find($id);
+        $city = City::findOrFail($id);
         return ok('City Detail', $city);
     }
 }

@@ -10,7 +10,7 @@ class StateController extends Controller
 {
     public function list($id)
     {
-        $state = State::find($id);
+        $state = State::findOrFail($id);
         return ok('State', $state);
     }
 
@@ -30,7 +30,7 @@ class StateController extends Controller
 
     public function update($id, Request $request)
     {
-        $state = State::find($id);
+        $state = State::findOrFail($id);
 
         $validaiton = Validator::make($request->all(), [
             'name'          => 'required|unique:states,name,' . $state->id,
@@ -46,14 +46,14 @@ class StateController extends Controller
 
     public function delete($id)
     {
-        $state = State::find($id);
+        $state = State::findOrFail($id);
         $state->delete();
         return ok('State Deleted Successfully');
     }
 
     public function show($id)
     {
-        $state = State::find($id);
+        $state = State::findOrFail($id);
         return ok('State Detail', $state);
     }
 }

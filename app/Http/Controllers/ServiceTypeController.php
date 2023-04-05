@@ -10,7 +10,7 @@ class ServiceTypeController extends Controller
 {
     public function list($id)
     {
-        $serviceType = ServiceType::find($id);
+        $serviceType = ServiceType::findOrFail($id);
         return ok('Service Type', $serviceType);
     }
 
@@ -29,7 +29,7 @@ class ServiceTypeController extends Controller
 
     public function update($id, Request $request)
     {
-        $serviceType = ServiceType::find($id);
+        $serviceType = ServiceType::findOrFail($id);
 
         $validaiton = Validator::make($request->all(), [
             'name'          => 'required|unique:service_types,name,' . $serviceType->id,
@@ -44,14 +44,14 @@ class ServiceTypeController extends Controller
 
     public function delete($id)
     {
-        $serviceType = ServiceType::find($id);
+        $serviceType = ServiceType::findOrFail($id);
         $serviceType->delete();
         return ok('Service Type Deleted Successfully');
     }
 
     public function show($id)
     {
-        $serviceType = ServiceType::find($id);
+        $serviceType = ServiceType::findOrFail($id);
         return ok('Service Type Detail', $serviceType);
     }
 }
