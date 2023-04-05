@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PasswordResetToken;
 use App\Models\User;
+use App\Notifications\ResetPasswordNotification;
 use App\Notifications\WelcomeNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -61,6 +63,52 @@ class AuthController extends Controller
             'email_verification_code'   =>  null
         ]);
         return ok('Email Verification Successfull.');
+    }
+
+    public function resetPasswordLink(Request $request)
+    {
+        $validation = Validator::make($request->all(),[
+            'email' => 'required|exists:users,email'
+        ]);
+
+        if($validation->fails())
+            return error('Validation Error',$validation->errors(),'validation');
+        
+        $user = User::where('email',$request->email)->first();
+        $token = Str::random(16);
+
+        PasswordResetToken::create([
+            'email'         => $user->email,
+            'token'         => $token,
+            'expiry_date'   => now()->addDays(2)
+        ]);
+
+        $user->notify(new ResetPasswordNotification($token));
+        return ok('Mail Sent');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validation = Validator::make($request->all(),[
+            'email'                 => 'required|email|exists:users,email|exists:password_reset_tokens,email',
+            'token'                 => 'required|exists:password_reset_tokens,token',
+            'password'              => 'required|min:8|max:18|confirmed',
+            'password_confirmation' => 'required'
+        ]);
+
+        if($validation->fails())
+            return error('Validation Error',$validation->errors(),'validation');
+        
+        $passwordResetToken = PasswordResetToken::where('token',$request->token)->first();
+        if($passwordResetToken->expiry_date > now()){
+            $user = User::where('email',$passwordResetToken->email)->first();
+            $user->update([
+                'password'  => Hash::make($request->password)
+            ]);
+            $passwordResetToken->delete();
+            return ok('Password Changed Successfully');
+        }
+        return error('Token Expired');
     }
 
 
