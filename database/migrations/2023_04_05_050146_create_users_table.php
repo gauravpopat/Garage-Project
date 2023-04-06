@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('first_name', 255);
             $table->string('last_name', 255);
             $table->string('email')->unique();
-            $table->enum('type', ['Customer', 'Mechanic']);
+            $table->enum('type', ['Customer', 'Mechanic', 'Owner']);
             $table->string('billing_name', 255);
             $table->text('address1');
             $table->text('address2')->nullable();
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->boolean('is_verified')->default(false);
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('service_type_id')->references('id')->on('service_types')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('email_verification_code',255)->nullable();
+            $table->text('email_verification_code')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
