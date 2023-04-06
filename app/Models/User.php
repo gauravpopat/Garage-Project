@@ -54,4 +54,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function serviceTypes()
+    {
+        return $this->belongsToMany(ServiceType::class,'user_service_types','user_id','service_type_id');
+    }
 }
