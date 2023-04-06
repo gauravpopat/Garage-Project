@@ -9,6 +9,7 @@ use App\Http\Controllers\GarageController;
 use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\UserController;
+use App\Models\CarServicingJob;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -104,6 +105,14 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('update/{id}', 'update');
             Route::post('delete/{id}', 'delete');
             Route::get('show', 'show');
+        });
+
+        Route::controller(CarServicingJobController::class)->prefix('car-servicing-job')->group(function(){
+            Route::get('list','list');
+            Route::post('assign','assign');
+            Route::post('update','update');
+            Route::get('delete/{id}','delete');
+            Route::get('show/{id}','id');
         });
     });
 });
