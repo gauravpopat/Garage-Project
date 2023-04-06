@@ -10,7 +10,7 @@ class StateController extends Controller
 {
     public function list($id)
     {
-        $state = State::findOrFail($id);
+        $state = State::findOrFail($id)->load('cities');
         return ok('State', $state);
     }
 

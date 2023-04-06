@@ -11,7 +11,7 @@ class CountryController extends Controller
 
     public function list($id)
     {
-        $country = Country::findOrFailOrFail($id)->load('states','cities');
+        $country = Country::findOrFail($id)->load('states','cities');
         return ok('Country',$country);
     }
 
