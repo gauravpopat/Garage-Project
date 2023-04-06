@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class GarageServiceType extends Model
 {
     use HasFactory;
+    protected $fillable = ['garage_id', 'service_type_id'];
 }
