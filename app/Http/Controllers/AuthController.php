@@ -26,14 +26,13 @@ class AuthController extends Controller
             'phone'                 => 'required|regex:/[6-9][0-9]{9}/|unique:users,phone',
             'profile_picture'       => 'required|file',
             'city_id'               => 'required|exists:cities,id',
-            // 'garage_id'             => 'required|exists:garages,id',
             'service_type_id'       => 'required_if:type,Mechanic|exists:service_types,id',
             'password'              => 'required|min:8|max:18',
             'password_confirmation' => 'required'
         ]);
 
         if ($validation->fails())
-            return error('Validation Error', $validation->errors(), 'Validation');
+            return error('Validation Error', $validation->errors(), 'validation');
 
         // store file in $profile
         $profile = $request->file('profile_picture');
@@ -125,7 +124,7 @@ class AuthController extends Controller
         ]);
 
         if ($validation->fails())
-            return error('Validation Error', $validation->errors(), 'Validation');
+            return error('Validation Error', $validation->errors(), 'validation');
         $user = User::where('email', $request->email)->first();
         if ($user->is_verified == true) {
             if (Auth::attempt(['email'  =>  $request->email, 'password' => $request->password])) {
