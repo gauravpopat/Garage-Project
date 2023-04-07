@@ -20,18 +20,6 @@ class UserController extends Controller
         return ok('User Detail', $user);
     }
 
-    public function list(Request $request)
-    {
-        $this->ListingValidation();
-        $query = Garage::query();
-        $searchable_fields = ['city_id', 'state_id', 'country_id', 'name', 'address1', 'address2', 'zipcode'];
-        $data = $this->filterSearchPagination($query, $searchable_fields);
-        return ok('Garage List', [
-            'garages'   =>  $data['query']->get(),
-            'count'     =>  $data['count']
-        ]);
-    }
-
     public function changePassword(Request $request)
     {
         $validation = Validator::make($request->all(), [
