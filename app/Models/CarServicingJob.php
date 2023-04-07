@@ -9,4 +9,5 @@ class CarServicingJob extends Model
 {
     use HasFactory;
     protected $fillable = ['car_servicing_id', 'mechanic_id', 'service_type_id', 'status'];
+
 }

@@ -55,8 +55,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function cars()
+    {
+        return $this->hasMany(Car::class,'owner_id','id');
+    }
+
     public function serviceTypes()
     {
         return $this->belongsToMany(ServiceType::class,'user_service_types','user_id','service_type_id');
     }
+
+    public function garages()
+    {
+        return $this->hasMany(Garage::class,'owner_id');
+    }
+
 }
