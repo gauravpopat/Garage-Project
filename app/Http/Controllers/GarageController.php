@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Validator;
 
 class GarageController extends Controller
 {
-    public function list($id)
+    public function list()
     {
-        $garage = Garage::findOrFail($id);
+        $garage = Garage::all();
         return ok('Garage', $garage);
     }
 
@@ -29,7 +29,7 @@ class GarageController extends Controller
         ]);
 
         if ($validation->fails())
-            return error('Validation Error', $validation->errors(), 'Validation');
+            return error('Validation Error', $validation->errors(), 'validation');
 
         $user = auth()->user();
 
