@@ -17,12 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('garage_id');
             $table->unsignedBigInteger('car_id');
             $table->unsignedBigInteger('service_id');
-            $table->enum('status',['Initiated','In-Progress','Delay','Complete','Delivered']);
-
             $table->foreign('garage_id')->references('id')->on('garages')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('service_id')->references('id')->on('service_types')->onDelete('cascade')->onUpdate('cascade');
-
             $table->timestamps();
         });
     }
