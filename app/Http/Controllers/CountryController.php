@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Validator;
 class CountryController extends Controller
 {
 
-    public function list($id)
+    public function list()
     {
-        $country = Country::findOrFail($id)->load('states','cities');
-        return ok('Country',$country);
+        $countries = Country::all();
+        return ok('Country', $countries);
     }
 
     public function create(Request $request)
@@ -40,19 +40,22 @@ class CountryController extends Controller
             return error('Validation Error', $validaiton->errors(), 'Validation');
 
         $country->update($request->only('name'));
+
         return ok('Country updated successfully.', $country);
     }
 
     public function delete($id)
     {
         $country = Country::findOrFail($id);
+        $country->states()->delete();
         $country->delete();
+
         return ok('Country Deleted Successfully');
     }
 
     public function show($id)
     {
-        $country = Country::findOrFail($id);
+        $country = Country::findOrFail($id)->load('states', 'cities');
         return ok('Country Detail', $country);
     }
 }
