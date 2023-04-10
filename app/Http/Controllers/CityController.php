@@ -46,6 +46,7 @@ class CityController extends Controller
     public function delete($id)
     {
         $city = City::findOrFail($id);
+        $city->garages()->delete();
         $city->delete();
         return ok('City Deleted Successfully');
     }
