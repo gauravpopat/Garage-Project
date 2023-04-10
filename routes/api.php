@@ -102,7 +102,7 @@
 
         Route::controller(CarController::class)->prefix('car')->group(function () {
             Route::get('list', 'list');
-            Route::post('add-to-service','addToService'); 
+            Route::post('add-to-service', 'addToService');
             Route::post('create', 'create');
             Route::post('update/{id}', 'update');
             Route::post('delete/{id}', 'delete');
@@ -114,6 +114,8 @@
         Route::controller(CarServicingController::class)->prefix('car-service')->group(function () {
             Route::get('list-of-garage', 'list');
             Route::post('create', 'create');
+            Route::get('get-history', 'getHistory');
+            Route::get('get-status', 'getStatus');
         });
 
         /******************************************************Owner:**************************************************************/
@@ -134,8 +136,8 @@
             Route::controller(CarServicingJobController::class)->prefix('car-servicing-job')->group(function () {
                 Route::get('list', 'list');
                 Route::post('assign', 'assign');
-                Route::post('update', 'update');
                 Route::get('delete/{id}', 'delete');
+                Route::get('review', 'review');
                 Route::get('show/{id}', 'id');
             });
         });
@@ -145,7 +147,9 @@
         Route::middleware(['hasMechanic'])->group(function () {
             Route::controller(MechanicController::class)->prefix('mechanic')->group(function () {
                 Route::get('profile', 'profile');
+                Route::post('add-customers', 'addCustomers');
                 Route::post('update-status', 'updateStatus');
+                Route::post('register-garage', 'registerGarage');
             });
         });
     });
