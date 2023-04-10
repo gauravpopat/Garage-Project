@@ -27,27 +27,6 @@ class CarController extends Controller
         return ok('Car Added Successfully', $car);
     }
 
-    public function addToService(Request $request)
-    {
-        $validation = Validator::make($request->all(), [
-            'car_id'        => 'required|exists:cars,id',
-            'garage_id'     => 'required|exists:garages,id',
-            'service_id'    => 'required|array|exists:service_types,id'
-        ]);
-
-        if ($validation->fails())
-            return error('Validation Error', $validation->errors(), 'validation');
-        
-        $car = Car::find($request->car_id);
-        $carOwnerId = $car->user->id;
-
-        if($carOwnerId != auth()->user()->id){
-            return error('Not your car.');
-        }
-
-        // return 'pending task';
-    }
-
     public function update($id, Request $request)
     {
         $car = Car::find($id);
