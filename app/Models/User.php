@@ -74,9 +74,4 @@ class User extends Authenticatable
     {
         return $this->belongsTo(City::class);
     }
-
-    public function garageOwner()
-    {
-        return $this->hasMany(Garage::class, 'owner_id');
-    }
 }
