@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Validator;
 
 class ServiceTypeController extends Controller
 {
-    public function list($id)
+    public function list()
     {
-        $serviceType = ServiceType::findOrFail($id);
-        return ok('Service Type', $serviceType);
+        $serviceTypes = ServiceType::all();
+        return ok('Service Types', $serviceTypes);
     }
 
     public function create(Request $request)
