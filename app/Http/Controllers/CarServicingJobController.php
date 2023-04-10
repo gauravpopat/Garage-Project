@@ -12,6 +12,13 @@ use App\Notifications\UserNotifyByOwner;
 
 class CarServicingJobController extends Controller
 {
+
+    public function list()
+    {
+        $carServicing = CarServicing::all();
+        return ok('Car Servicing',$carServicing);
+    }
+
     public function assign(Request $request)
     {
         $validation = Validator::make($request->all(), [
