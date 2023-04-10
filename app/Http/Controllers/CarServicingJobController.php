@@ -7,15 +7,11 @@ use App\Models\CarServicingJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use App\Models\Car;
+use App\Notifications\UserNotifyByOwner;
 
 class CarServicingJobController extends Controller
 {
-    public function list()
-    {
-        $carServicing = CarServicing::all();
-        return ok('Car Servicing', $carServicing);
-    }
-
     public function assign(Request $request)
     {
         $validation = Validator::make($request->all(), [
@@ -33,32 +29,16 @@ class CarServicingJobController extends Controller
         }
 
         CarServicingJob::create($request->only(['car_servicing_id', 'mechanic_id', 'service_type_id']) + [
-            'status'    =>  'pending'
-        ]);
-
-        $carServicing = CarServicing::find($request->car_servicing_id);
-
-        $carServicing->update([
-            'status'    => 'Initiated'
+            'status'    =>  'In-Progress'
         ]);
 
         return ok('Inserted Successfully');
     }
 
-    public function update($id, Request $request)
+    public function review($id,Request $request)
     {
-        $validation = Validator::make($request->all(), [
-            'status'    => 'required|in:Pending,In-Progress,Complete'
-        ]);
-
-        if ($validation->fails())
-            return error('Validation', $validation->errors(), 'validation');
-
         $carServicingJob = CarServicingJob::findOrFail($id);
-
-        $carServicing = CarServicing::find($carServicingJob->car_servicing_id);
-        $carServicingJob->update($request->only('status'));
-        $carServicing->update($request->only('status'));
-        return ok('Status Updated Successfully');
+        return ok('Car Servicing Job Detail',$carServicingJob);
     }
+
 }
