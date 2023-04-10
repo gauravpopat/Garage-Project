@@ -47,6 +47,7 @@ class StateController extends Controller
     public function delete($id)
     {
         $state = State::findOrFail($id);
+        $state->cities()->delete();
         $state->delete();
         return ok('State Deleted Successfully');
     }
