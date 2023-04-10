@@ -57,17 +57,26 @@ class User extends Authenticatable
 
     public function cars()
     {
-        return $this->hasMany(Car::class,'owner_id','id');
+        return $this->hasMany(Car::class, 'owner_id', 'id');
     }
 
     public function serviceTypes()
     {
-        return $this->belongsToMany(ServiceType::class,'user_service_types','user_id','service_type_id');
+        return $this->belongsToMany(ServiceType::class, 'user_service_types', 'user_id', 'service_type_id');
     }
 
     public function garages()
     {
-        return $this->hasMany(Garage::class,'owner_id');
+        return $this->hasMany(Garage::class, 'owner_id');
     }
 
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function garageOwner()
+    {
+        return $this->hasMany(Garage::class, 'owner_id');
+    }
 }
