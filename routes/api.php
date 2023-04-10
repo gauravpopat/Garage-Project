@@ -102,7 +102,6 @@
 
         Route::controller(CarController::class)->prefix('car')->group(function () {
             Route::get('list', 'list');
-            Route::post('add-to-service', 'addToService');
             Route::post('create', 'create');
             Route::post('update/{id}', 'update');
             Route::post('delete/{id}', 'delete');
@@ -114,13 +113,14 @@
         Route::controller(CarServicingController::class)->prefix('car-service')->group(function () {
             Route::get('list-of-garage', 'list');
             Route::post('create', 'create');
-            Route::get('get-history', 'getHistory');
+            Route::get('get-history','getHistory');
             Route::get('get-status', 'getStatus');
         });
 
         /******************************************************Owner:**************************************************************/
 
         Route::middleware(['hasOwner'])->group(function () {
+            
             // Garage :
 
             Route::controller(GarageController::class)->prefix('garage')->group(function () {
@@ -137,7 +137,7 @@
                 Route::get('list', 'list');
                 Route::post('assign', 'assign');
                 Route::get('delete/{id}', 'delete');
-                Route::get('review', 'review');
+                Route::get('review','review');
                 Route::get('show/{id}', 'id');
             });
         });
