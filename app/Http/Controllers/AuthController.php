@@ -20,14 +20,14 @@ class AuthController extends Controller
             'first_name'            => 'required|max:50',
             'last_name'             => 'required|max:50',
             'email'                 => 'required|email|max:50|unique:users,email',
-            'type'                  => 'required|in:Customer,Mechanic,Owner',
+            'type'                  => 'in:Customer,Mechanic,Owner',
             'address1'              => 'required',
             'zip_code'              => 'required|digits:6',
             'phone'                 => 'required|regex:/[6-9][0-9]{9}/|unique:users,phone',
             'profile_picture'       => 'required|file',
             'city_id'               => 'required|exists:cities,id',
             'service_type_id'       => 'required_if:type,Mechanic|exists:service_types,id',
-            'password'              => 'required|min:8|max:18',
+            'password'              => 'required|confirmed|min:8|max:18|',
             'password_confirmation' => 'required'
         ]);
 
@@ -88,7 +88,7 @@ class AuthController extends Controller
         ]);
 
         $user->notify(new ResetPasswordNotification($token));
-        return ok('Mail Sent');
+        return ok('Mail Sent!');
     }
 
     public function resetPassword(Request $request)
@@ -104,15 +104,16 @@ class AuthController extends Controller
             return error('Validation Error', $validation->errors(), 'validation');
 
         $passwordResetToken = PasswordResetToken::where('token', $request->token)->first();
-        if ($passwordResetToken->expiry_date > now()) {
-            $user = User::where('email', $passwordResetToken->email)->first();
-            $user->update([
-                'password'  => Hash::make($request->password)
-            ]);
-            $passwordResetToken->delete();
-            return ok('Password Changed Successfully');
-        }
-        return error('Token Expired');
+
+        if ($passwordResetToken->expiry_date < now())
+            return error('Token Expired');
+
+        $user = User::where('email', $passwordResetToken->email)->first();
+        $user->update([
+            'password'  => Hash::make($request->password)
+        ]);
+        $passwordResetToken->delete();
+        return ok('Password Changed Successfully');
     }
 
 
@@ -125,7 +126,9 @@ class AuthController extends Controller
 
         if ($validation->fails())
             return error('Validation Error', $validation->errors(), 'validation');
+
         $user = User::where('email', $request->email)->first();
+        
         if ($user->is_verified == true) {
             if (Auth::attempt(['email'  =>  $request->email, 'password' => $request->password])) {
                 $token = $user->createToken('Login Token')->plainTextToken;
