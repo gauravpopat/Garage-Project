@@ -12,8 +12,8 @@ class GarageController extends Controller
 {
     public function list()
     {
-        $garage = Garage::all();
-        return ok('Garage', $garage);
+        $garage = auth()->user()->garages;
+        return ok('Garages', $garage);
     }
 
     public function create(Request $request)
@@ -24,7 +24,6 @@ class GarageController extends Controller
             'address2'          => 'required',
             'zip_code'          => 'required',
             'city_id'           => 'required|exists:cities,id',
-            // 'owner_id'          => 'required|exists:users,id',
             'service_type_id'   => 'required|array|exists:service_types,id'
         ]);
 
@@ -34,8 +33,8 @@ class GarageController extends Controller
         $user = auth()->user();
 
         //find country and state based on city.
-        $city = City::where('id', $request->city_id)->first();
-        $state = $city->state;
+        $city    = City::where('id', $request->city_id)->first();
+        $state   = $city->state;
         $country = Country::find($state->country_id);
 
         $garage = Garage::create($request->only(['name', 'address1', 'address2', 'zip_code', 'city_id']) + [
@@ -55,6 +54,13 @@ class GarageController extends Controller
 
     public function update($id, Request $request)
     {
+
+        $garage = auth()->user()->garages->find($id);
+
+        if (!$garage) {
+            return error('No Garage Found!');
+        }
+
         $validation = Validator::make($request->all(), [
             'name'          => 'required|max:50',
             'address1'      => 'required',
@@ -70,8 +76,6 @@ class GarageController extends Controller
         $state = $city->state;
         $country = Country::find($state->country_id);
 
-        $garage = Garage::findOrFail($id);
-
         $garage->update($request->only(['name', 'address1', 'address2', 'zip_code', 'city_id']) + [
             'state_id'      => $state->id,
             'country_id'    => $country->id,
@@ -83,14 +87,20 @@ class GarageController extends Controller
 
     public function delete($id)
     {
-        $garage = Garage::findOrFail($id);
-        $garage->delete();
-        return ok('Garage Deleted Successfully');
+        $garage = auth()->user()->garages->find($id);
+        if ($garage) {
+            $garage->delete();
+            return ok('Garage Deleted Successfully');
+        }
+        return error('No Garage Found!');
     }
 
     public function show($id)
     {
-        $garage = Garage::findOrFail($id);
-        return ok('Garage Detail', $garage);
+        $garage = auth()->user()->garages->find($id);
+        if ($garage) {
+            return ok('Garage Detail', $garage);
+        }
+        return error('No Garage Found');
     }
 }
