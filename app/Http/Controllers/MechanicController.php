@@ -21,7 +21,7 @@ class MechanicController extends Controller
     public function profile()
     {
         $mechanic = auth()->user();
-        return ok('Mechanic Profile', $mechanic->load('serviceTypes'));
+        return ok('Mechanic Profile', $mechanic->load('serviceTypes', 'city'));
     }
 
     public function addCustomers(Request $request)
@@ -92,9 +92,9 @@ class MechanicController extends Controller
 
         $user = auth()->user();
         //find country and state based on city.
-        $city = City::where('id', $request->city_id)->first();
-        $state = $city->state;
-        $country = Country::find($state->country_id);
+        $city       = City::where('id', $request->city_id)->first();
+        $state      = $city->state;
+        $country    = Country::find($state->country_id);
 
         $garage = Garage::create($request->only(['name', 'address1', 'address2', 'zip_code', 'city_id']) + [
             'state_id'      =>  $state->id,
@@ -133,8 +133,8 @@ class MechanicController extends Controller
 
         if ($carServicingJob->status == 'Complete') {
             $carServicing = CarServicing::where('id', $carServicingJob->car_servicing_id)->first();
-            $car = Car::where('id', $carServicing->car_id)->first();
-            $user = $car->user;
+            $car    =   Car::where('id', $carServicing->car_id)->first();
+            $user   =   $car->user;
             $user->notify(new UserNotify($car));
         }
 
