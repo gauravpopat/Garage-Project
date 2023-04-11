@@ -32,7 +32,7 @@
     });
 
 
-    /******************************************************Guest User:**********************************************************************/
+    /************************************Guest User:****************************************************/
 
     // Auth :
 
@@ -85,7 +85,7 @@
     });
 
 
-    /********************************************************Auth User:**********************************************************************/
+    /********************************************Auth User:**********************************************************/
 
     Route::middleware('auth:sanctum')->group(function () {
 
@@ -112,14 +112,14 @@
         Route::controller(CarServicingController::class)->prefix('car-service')->group(function () {
             Route::get('list-of-garage', 'list');
             Route::post('create', 'create');
-            Route::get('get-history','getHistory');
+            Route::get('get-history', 'getHistory');
             Route::get('get-status', 'getStatus');
         });
 
-        /******************************************************Owner:**************************************************************/
+        /************************************************Owner:********************************************************/
 
         Route::middleware(['hasOwner'])->prefix('owner')->group(function () {
-            
+
             // Garage :
 
             Route::controller(GarageController::class)->prefix('garage')->group(function () {
@@ -136,12 +136,12 @@
                 Route::get('list', 'list');
                 Route::post('assign', 'assign'); // assign job to mechanic
                 Route::get('delete/{id}', 'delete');
-                Route::get('review','review');
+                Route::get('review', 'review');
                 Route::get('show/{id}', 'id');
             });
         });
 
-        /**************************************************Mechanic****************************************************************/
+        /********************************************Mechanic**********************************************************/
 
         Route::middleware(['hasMechanic'])->group(function () {
             Route::controller(MechanicController::class)->prefix('mechanic')->group(function () {
