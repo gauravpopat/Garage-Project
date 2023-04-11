@@ -94,7 +94,6 @@
         Route::controller(UserController::class)->prefix('user')->group(function () {
             Route::get('profile', 'profile');
             Route::post('change-password', 'changePassword');
-            Route::post('get-history', 'getHistory');
             Route::post('logout', 'logout');
         });
 
@@ -119,7 +118,7 @@
 
         /******************************************************Owner:**************************************************************/
 
-        Route::middleware(['hasOwner'])->group(function () {
+        Route::middleware(['hasOwner'])->prefix('owner')->group(function () {
             
             // Garage :
 
@@ -135,7 +134,7 @@
 
             Route::controller(CarServicingJobController::class)->prefix('car-servicing-job')->group(function () {
                 Route::get('list', 'list');
-                Route::post('assign', 'assign');
+                Route::post('assign', 'assign'); // assign job to mechanic
                 Route::get('delete/{id}', 'delete');
                 Route::get('review','review');
                 Route::get('show/{id}', 'id');
