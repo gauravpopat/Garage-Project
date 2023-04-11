@@ -41,7 +41,7 @@ class CarServicingController extends Controller
         $carOwnerId = $car->user->id;
 
         if ($carOwnerId == auth()->user()->id) {
-            $car->carServicings()->attach($request->only(['garage_id','car_id','service_id']));
+            CarServicing::create($request->only(['garage_id', 'car_id', 'service_id']));
             return ok('Car Added For Service', $car);
         } else {
             return error('Car Not Found');
