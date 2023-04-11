@@ -62,6 +62,8 @@ class AuthController extends Controller
     public function verifyEmail($email_verification_code)
     {
         $user = User::where('email_verification_code', $email_verification_code)->first();
+        if($user->is_verified == true)
+            return error('Your Account Already Verified');
         $user->update([
             'is_verified'               =>  true,
             'email_verification_code'   =>  null
