@@ -54,7 +54,6 @@ class GarageController extends Controller
 
     public function update($id, Request $request)
     {
-
         $garage = auth()->user()->garages->find($id);
 
         if (!$garage) {
@@ -88,19 +87,23 @@ class GarageController extends Controller
     public function delete($id)
     {
         $garage = auth()->user()->garages->find($id);
+
         if ($garage) {
             $garage->delete();
             return ok('Garage Deleted Successfully');
         }
+
         return error('No Garage Found!');
     }
 
     public function show($id)
     {
         $garage = auth()->user()->garages->find($id);
+
         if ($garage) {
             return ok('Garage Detail', $garage);
         }
+
         return error('No Garage Found');
     }
 }
