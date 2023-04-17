@@ -56,7 +56,7 @@
             Route::post('create', 'create');
             Route::post('update/{id}', 'update');
             Route::post('delete/{id}', 'delete');
-            Route::get('show', 'show');
+            Route::get('show/{id}', 'show');
         });
 
         // State :
@@ -66,7 +66,7 @@
             Route::post('create', 'create');
             Route::post('update/{id}', 'update');
             Route::post('delete/{id}', 'delete');
-            Route::get('show', 'show');
+            Route::get('show/{id}', 'show');
         });
 
         // City :
@@ -76,7 +76,7 @@
             Route::post('create', 'create');
             Route::post('update/{id}', 'update');
             Route::post('delete/{id}', 'delete');
-            Route::get('show', 'show');
+            Route::get('show/{id}', 'show');
         });
 
         // Service Type :
