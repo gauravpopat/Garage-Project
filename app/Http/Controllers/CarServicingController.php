@@ -58,9 +58,9 @@ class CarServicingController extends Controller
         if ($validation->fails())
             return error('Validation Error', $validation->errors(), 'validation');
 
-        $carServicing = CarServicing::where('car_id', $request->car_id)->first();
-        if ($carServicing) {
-            return ok('History', $carServicing);
+        $car = Car::findOrFail($request->car_id);
+        if ($car->owner_id == auth()->user()->id) {
+            return ok('History', $car->carServicingJobs);
         }
 
         return error('No Any Services Found.');
@@ -69,6 +69,7 @@ class CarServicingController extends Controller
 
     public function getStatus(Request $request)
     {
+
         $validation = Validator::make($request->all(), [
             'car_servicing_id'  => 'required|exists:car_servicings,id'
         ]);
@@ -77,11 +78,15 @@ class CarServicingController extends Controller
             return error('Validation Error', $validation->errors(), 'validation');
 
         $carServicing = CarServicing::where('id', $request->car_servicing_id)->first();
+
         $car = Car::where('id', $carServicing->car_id)->where('owner_id', auth()->user()->id)->first();
 
         if ($car) {
+
             $carServicingJob = CarServicingJob::where('car_servicing_id', $carServicing->id)->first();
+
             $mechanic = User::where('id', $carServicingJob->mechanic_id)->first();
+
             return response()->json([
                 'message'   => 'status',
                 'mechanic'  => $mechanic,
