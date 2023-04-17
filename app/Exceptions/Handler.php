@@ -5,7 +5,11 @@ namespace App\Exceptions;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Error;
 use Throwable;
+
+
 
 class Handler extends ExceptionHandler
 {
@@ -24,7 +28,9 @@ class Handler extends ExceptionHandler
      * @var array<int, class-string<\Throwable>>
      */
     protected $dontReport = [
-        //
+        AuthorizationException::class,
+        HttpException::class,
+
     ];
 
     /**
@@ -43,13 +49,37 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->renderable(function (ModelNotFoundException $e, $exception){
+        $this->renderable(function (ModelNotFoundException $e, $exception) {
             return error('Failed', 'Model Not Found');
         });
 
-        $this->renderable(function (NotFoundHttpException $e, $exception){
+        $this->renderable(function (NotFoundHttpException $e, $exception) {
             return error('Failed', 'Data Not Found');
         });
+
+        $this->reportable(function (Throwable $exception) {
+            // only create entries if app environment is not local
+            if (!app()->environment('local')) {
+                $user_id = 0;
+
+
+                if (Auth::user()) {
+                    $user_id = Auth::user()->id;
+                }
+
+                $data = array(
+                    'user_id'   => $user_id,
+                    'code'      => $exception->getCode(),
+                    'file'      => $exception->getFile(),
+                    'line'      => $exception->getLine(),
+                    'message'   => $exception->getMessage(),
+                    'trace'     => $exception->getTraceAsString(),
+                );
+
+                Error::create($data);
+            }
+        });
+
 
         // $this->reportable(function (Throwable $e){});
     }
