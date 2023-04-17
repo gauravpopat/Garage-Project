@@ -5,13 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\City;
 use Illuminate\Support\Facades\Validator;
+use App\Traits\ListingApiTrait;
 
 class CityController extends Controller
 {
+    use ListingApiTrait;
     public function list($id)
     {
-        $city = City::findOrFail($id);
-        return ok('City', $city);
+        $this->ListingValidation();
+        $query = City::query();
+        $searchable_fields = ['name'];
+        $data = $this->filterSearchPagination($query, $searchable_fields);
+        return ok('City List', [
+            'cities'    =>  $data['query']->get(),
+            'count'     =>  $data['count']
+        ]);
     }
 
     public function create(Request $request)

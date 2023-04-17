@@ -12,8 +12,14 @@ class GarageController extends Controller
 {
     public function list()
     {
-        $garage = auth()->user()->garages;
-        return ok('Garages', $garage);
+        $this->ListingValidation();
+        $query = auth()->user()->garages;
+        $searchable_fields = ['city_id', 'state_id', 'country_id', 'name'];
+        $data = $this->filterSearchPagination($query, $searchable_fields);
+        return ok('Garage List', [
+            'garages'   =>  $data['query']->get(),
+            'count'     =>  $data['count']
+        ]);
     }
 
     public function create(Request $request)

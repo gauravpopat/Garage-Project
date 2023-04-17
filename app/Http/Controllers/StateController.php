@@ -15,8 +15,8 @@ class StateController extends Controller
         $query = State::query();
         $searchable_fields = ['name'];
         $data = $this->filterSearchPagination($query, $searchable_fields);
-        return ok('Garage List', [
-            'garages'   =>  $data['query']->get(),
+        return ok('State List', [
+            'states'    =>  $data['query']->get(),
             'count'     =>  $data['count']
         ]);
 
@@ -49,7 +49,7 @@ class StateController extends Controller
 
         if ($validaiton->fails())
             return error('Validation Error', $validaiton->errors(), 'Validation');
-            
+
         $state->update($request->only('name', 'country_id'));
         return ok('State updated successfully.', $state);
     }

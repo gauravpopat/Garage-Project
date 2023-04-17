@@ -11,8 +11,14 @@ class CountryController extends Controller
 
     public function list()
     {
-        $countries = Country::all();
-        return ok('Country', $countries);
+        $this->ListingValidation();
+        $query = Country::query();
+        $searchable_fields = ['name'];
+        $data = $this->filterSearchPagination($query, $searchable_fields);
+        return ok('Country List', [
+            'countries'    =>  $data['query']->get(),
+            'count'        =>  $data['count']
+        ]);
     }
 
     public function create(Request $request)
