@@ -62,7 +62,7 @@ class AuthController extends Controller
     public function verifyEmail($email_verification_code)
     {
         $user = User::where('email_verification_code', $email_verification_code)->first();
-        if($user->is_verified == true)
+        if ($user->is_verified == true)
             return error('Your Account Already Verified');
         $user->update([
             'is_verified'               =>  true,
@@ -130,7 +130,7 @@ class AuthController extends Controller
             return error('Validation Error', $validation->errors(), 'validation');
 
         $user = User::where('email', $request->email)->first();
-        
+
         if ($user->is_verified == true) {
             if (Auth::attempt(['email'  =>  $request->email, 'password' => $request->password])) {
                 $token = $user->createToken('Login Token')->plainTextToken;
