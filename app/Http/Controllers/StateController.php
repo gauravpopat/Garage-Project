@@ -10,6 +10,16 @@ class StateController extends Controller
 {
     public function list($id)
     {
+
+        $this->ListingValidation();
+        $query = State::query();
+        $searchable_fields = ['name'];
+        $data = $this->filterSearchPagination($query, $searchable_fields);
+        return ok('Garage List', [
+            'garages'   =>  $data['query']->get(),
+            'count'     =>  $data['count']
+        ]);
+
         $state = State::findOrFail($id)->load('cities');
         return ok('State', $state);
     }
