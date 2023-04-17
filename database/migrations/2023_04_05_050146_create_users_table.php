@@ -16,15 +16,15 @@ return new class extends Migration
             $table->string('first_name', 255);
             $table->string('last_name', 255);
             $table->string('email')->unique();
-            $table->enum('type', ['Customer', 'Mechanic', 'Owner'])->default('Customer');
+            $table->enum('type', ['Customer', 'Mechanic', 'Owner', 'Admin'])->default('Customer');
             $table->string('billing_name', 255);
             $table->text('address1');
             $table->text('address2')->nullable();
             $table->string('zip_code');
             $table->string('password');
             $table->string('phone')->unique();
-            $table->string('profile_picture');
-            $table->unsignedBigInteger('city_id');
+            $table->string('profile_picture')->nullable();
+            $table->unsignedBigInteger('city_id')->nullable();
             $table->unsignedBigInteger('service_type_id')->nullable();
             $table->boolean('is_verified')->default(false);
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
