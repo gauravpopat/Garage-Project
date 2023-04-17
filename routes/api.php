@@ -44,46 +44,51 @@
         Route::post('reset-password', 'resetPassword');
     });
 
-    // Country :
 
-    Route::controller(CountryController::class)->prefix('country')->group(function () {
-        Route::get('list/{id}', 'list');
-        Route::post('create', 'create');
-        Route::post('update/{id}', 'update');
-        Route::post('delete/{id}', 'delete');
-        Route::get('show', 'show');
+
+
+
+    Route::middleware(['auth:sanctum','isAdmin'])->group(function () {
+        // Country :
+
+        Route::controller(CountryController::class)->prefix('country')->group(function () {
+            Route::get('list/{id}', 'list');
+            Route::post('create', 'create');
+            Route::post('update/{id}', 'update');
+            Route::post('delete/{id}', 'delete');
+            Route::get('show', 'show');
+        });
+
+        // State :
+
+        Route::controller(StateController::class)->prefix('state')->group(function () {
+            Route::get('list/{id}', 'list');
+            Route::post('create', 'create');
+            Route::post('update/{id}', 'update');
+            Route::post('delete/{id}', 'delete');
+            Route::get('show', 'show');
+        });
+
+        // City :
+
+        Route::controller(CityController::class)->prefix('city')->group(function () {
+            Route::get('list/{id}', 'list');
+            Route::post('create', 'create');
+            Route::post('update/{id}', 'update');
+            Route::post('delete/{id}', 'delete');
+            Route::get('show', 'show');
+        });
+
+        // Service Type :
+
+        Route::controller(ServiceTypeController::class)->prefix('service-type')->group(function () {
+            Route::get('list', 'list');
+            Route::post('create', 'create');
+            Route::post('update/{id}', 'update');
+            Route::post('delete/{id}', 'delete');
+            Route::get('show/{id}', 'show');
+        });
     });
-
-    // State :
-
-    Route::controller(StateController::class)->prefix('state')->group(function () {
-        Route::get('list/{id}', 'list');
-        Route::post('create', 'create');
-        Route::post('update/{id}', 'update');
-        Route::post('delete/{id}', 'delete');
-        Route::get('show', 'show');
-    });
-
-    // City :
-
-    Route::controller(CityController::class)->prefix('city')->group(function () {
-        Route::get('list/{id}', 'list');
-        Route::post('create', 'create');
-        Route::post('update/{id}', 'update');
-        Route::post('delete/{id}', 'delete');
-        Route::get('show', 'show');
-    });
-
-    // Service Type :
-
-    Route::controller(ServiceTypeController::class)->prefix('service-type')->group(function () {
-        Route::get('list', 'list');
-        Route::post('create', 'create');
-        Route::post('update/{id}', 'update');
-        Route::post('delete/{id}', 'delete');
-        Route::get('show/{id}', 'show');
-    });
-
 
     /********************************************Auth User:**********************************************************/
 
@@ -147,7 +152,7 @@
             Route::controller(MechanicController::class)->prefix('mechanic')->group(function () {
                 Route::get('profile', 'profile');
                 Route::post('add-customers', 'addCustomers');
-                Route::post('update-status', 'updateStatus');
+                Route::post('update-status/{id}', 'updateStatus');
                 Route::post('register-garage', 'registerGarage');
             });
         });
