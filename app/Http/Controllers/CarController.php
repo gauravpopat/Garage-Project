@@ -3,12 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\Garage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Traits\ListingApiTrait;
 use Illuminate\Support\Facades\Validator;
 
 class CarController extends Controller
 {
+    use ListingApiTrait;
+    public function list()
+    {
+        $this->ListingValidation();
+        $query = Car::where('owner_id', auth()->user()->id);
+        $searchable_fields = ['company_name', 'model_name', 'manufacturing_year'];
+        $data = $this->filterSearchPagination($query, $searchable_fields);
+        return ok('Car List', [
+            'cars'      =>  $data['query']->get(),
+            'count'     =>  $data['count']
+        ]);
+    }
+
     public function create(Request $request)
     {
         $validation = Validator::make($request->all(), [
@@ -51,7 +65,7 @@ class CarController extends Controller
 
     public function show($id)
     {
-        $car = Car::find($id);
+        $car = Car::findOrFail($id);
         $carOwnerId = $car->user->id;
 
         if ($carOwnerId == auth()->user()->id) {
