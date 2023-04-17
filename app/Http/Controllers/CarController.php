@@ -43,7 +43,7 @@ class CarController extends Controller
 
     public function update($id, Request $request)
     {
-        $car = Car::find($id);
+        $car = Car::findOrFail($id);
         $carOwnerId = $car->user->id;
 
         if (($carOwnerId != auth()->user()->id)) {
@@ -77,7 +77,7 @@ class CarController extends Controller
 
     public function delete($id)
     {
-        $car = Car::find($id);
+        $car = Car::findOrFail($id);
         $carOwnerId = $car->user->id;
 
         if ($carOwnerId == auth()->user()->id) {

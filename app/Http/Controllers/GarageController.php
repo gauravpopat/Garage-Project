@@ -41,7 +41,7 @@ class GarageController extends Controller
         //find country and state based on city.
         $city    = City::where('id', $request->city_id)->first();
         $state   = $city->state;
-        $country = Country::find($state->country_id);
+        $country = Country::findOrFail($state->country_id);
 
         $garage = Garage::create($request->only(['name', 'address1', 'address2', 'zip_code', 'city_id']) + [
             'state_id'      =>  $state->id,
@@ -79,7 +79,7 @@ class GarageController extends Controller
 
         $city = City::where('id', $request->city_id)->first();
         $state = $city->state;
-        $country = Country::find($state->country_id);
+        $country = Country::findOrFail($state->country_id);
 
         $garage->update($request->only(['name', 'address1', 'address2', 'zip_code', 'city_id']) + [
             'state_id'      => $state->id,

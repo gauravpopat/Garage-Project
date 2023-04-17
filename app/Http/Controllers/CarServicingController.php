@@ -37,7 +37,7 @@ class CarServicingController extends Controller
         if ($validation->fails())
             return error('Validation Error', $validation->errors(), 'validation');
 
-        $car = Car::find($request->car_id);
+        $car = Car::findOrFail($request->car_id);
         $carOwnerId = $car->user->id;
 
 

@@ -30,7 +30,7 @@ class CarServicingJobController extends Controller
         if ($validation->fails())
             return error('Validation Error', $validation->errors(), 'validation');
 
-        $user = User::find($request->mechanic_id);
+        $user = User::findOrFail($request->mechanic_id);
         if (!($user->type == 'Mechanic')) {
             return error('User ID :' . $request->mechanic_id . ' is not a mechanic');
         }
@@ -51,7 +51,7 @@ class CarServicingJobController extends Controller
 
     public function delete($id)
     {
-        $carServicingJob = CarServicingJob::find($id);
+        $carServicingJob = CarServicingJob::findOrFail($id);
 
         $carServicingJob->delete();
 
