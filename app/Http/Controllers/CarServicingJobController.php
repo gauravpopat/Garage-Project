@@ -16,7 +16,7 @@ class CarServicingJobController extends Controller
     public function list()
     {
         $carServicing = CarServicing::all();
-        return ok('Car Servicing',$carServicing);
+        return ok('Car Servicing', $carServicing);
     }
 
     public function assign(Request $request)
@@ -36,16 +36,25 @@ class CarServicingJobController extends Controller
         }
 
         CarServicingJob::create($request->only(['car_servicing_id', 'mechanic_id', 'service_type_id']) + [
-            'status'    =>  'In-Progress'
+            'status'        =>  'In-Progress',
+            'description'   => 'Assigned'
         ]);
 
         return ok('Inserted Successfully');
     }
 
-    public function review($id,Request $request)
+    public function review($id, Request $request)
     {
         $carServicingJob = CarServicingJob::findOrFail($id);
-        return ok('Car Servicing Job Detail',$carServicingJob);
+        return ok('Car Servicing Job Detail', $carServicingJob);
     }
 
+    public function delete($id)
+    {
+        $carServicingJob = CarServicingJob::find($id);
+
+        $carServicingJob->delete();
+
+        return ok('Job Deleted Successfully');
+    }
 }
