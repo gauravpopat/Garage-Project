@@ -28,7 +28,7 @@ class GarageController extends Controller
             'name'              => 'required|max:50',
             'address1'          => 'required',
             'address2'          => 'required',
-            'zip_code'          => 'required',
+            'zip_code'          => 'required|digits:6',
             'city_id'           => 'required|exists:cities,id',
             'service_type_id'   => 'required|array|exists:service_types,id'
         ]);
