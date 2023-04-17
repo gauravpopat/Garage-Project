@@ -25,4 +25,9 @@ class Car extends Model
         return $this->belongsToMany(ServiceType::class,'car_servicings','car_id','service_id');
     }
 
+    public function carServicingJobs()
+    {
+        return $this->hasManyThrough(CarServicingJob::class,CarServicing::class,'car_id','car_servicing_id','id','id');
+    }
+
 }
