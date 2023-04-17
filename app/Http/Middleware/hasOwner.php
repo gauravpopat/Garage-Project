@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 class hasOwner
 {
     /**
@@ -17,7 +16,7 @@ class hasOwner
     {
         if (auth()->user()->type == 'Owner') {
             return $next($request);
-        }
-        return error('You do not have access');
+        };
+        return error('You are a ' . auth()->user()->type . ', You do not have access of Owner');
     }
 }
