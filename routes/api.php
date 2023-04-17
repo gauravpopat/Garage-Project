@@ -31,6 +31,10 @@
         });
     });
 
+    Route::get('unauthenticated', function () {
+        return error('Unauthenticated!');
+    })->name('unauthenticated');
+
 
     /************************************Guest User:****************************************************/
 
@@ -44,11 +48,8 @@
         Route::post('reset-password', 'resetPassword');
     });
 
-
-
-
-
-    Route::middleware(['auth:sanctum','isAdmin'])->group(function () {
+    Route::middleware(['auth:sanctum', 'isAdmin'])->group(function () {
+        
         // Country :
 
         Route::controller(CountryController::class)->prefix('country')->group(function () {
