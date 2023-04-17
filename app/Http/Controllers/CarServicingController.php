@@ -40,6 +40,7 @@ class CarServicingController extends Controller
         $car = Car::find($request->car_id);
         $carOwnerId = $car->user->id;
 
+
         if ($carOwnerId == auth()->user()->id) {
             CarServicing::create($request->only(['garage_id', 'car_id', 'service_id']));
             return ok('Car Added For Service', $car);
@@ -59,8 +60,7 @@ class CarServicingController extends Controller
 
         $carServicing = CarServicing::where('car_id', $request->car_id)->first();
         if ($carServicing) {
-            $carServicingJobs = $carServicing->servicingJobs;
-            return ok('History', $carServicingJobs);
+            return ok('History', $carServicing);
         }
 
         return error('No Any Services Found.');
