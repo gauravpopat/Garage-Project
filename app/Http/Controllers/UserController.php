@@ -32,12 +32,17 @@ class UserController extends Controller
             return error('Validation Error', $validation->errors(), 'validation');
 
         $user = auth()->user();
+ 
         if (password_verify($request->old_password, $user->password)) {
             $user->update([
                 'password'  => Hash::make($request->password)
             ]);
+            return ok('Password Changed Successfully');
         }
-        return error('Old Password Not Matched');
+        else{
+            return error('Old Password Not Matched');
+        }
+        
     }
 
     public function logout()
