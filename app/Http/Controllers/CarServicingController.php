@@ -79,9 +79,9 @@ class CarServicingController extends Controller
 
         $carServicing = CarServicing::findOrFail($request->car_servicing_id);
 
-        $car = Car::where('id', $carServicing->car_id)->where('owner_id', auth()->user()->id)->first();
+        $car = Car::findOrFail($carServicing->car_id);
 
-        if ($car) {
+        if ($car->owner_id == auth()->user()->id) {
 
             $carServicingJob = CarServicingJob::where('car_servicing_id', $carServicing->id)->first();
 
@@ -93,7 +93,6 @@ class CarServicingController extends Controller
                 'status'    => $carServicingJob->status
             ]);
         }
-
         return error('No Record Found');
     }
 }
