@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Car;
+use App\Models\Garage;
 use App\Notifications\UserNotifyByOwner;
 
 class CarServicingJobController extends Controller
@@ -43,7 +44,7 @@ class CarServicingJobController extends Controller
         return ok('Inserted Successfully');
     }
 
-    public function review($id, Request $request)
+    public function review($id)
     {
         $carServicingJob = CarServicingJob::findOrFail($id);
         return ok('Car Servicing Job Detail', $carServicingJob);
@@ -52,9 +53,12 @@ class CarServicingJobController extends Controller
     public function delete($id)
     {
         $carServicingJob = CarServicingJob::findOrFail($id);
+        $garage = Garage::find($carServicingJob->carServicings->garage_id);
 
-        $carServicingJob->delete();
-
-        return ok('Job Deleted Successfully');
+        if (auth()->user()->id == $garage->owner_id) {
+            $carServicingJob->delete();
+            return ok('Job Deleted Successfully');
+        }
+        return error('No Access!');
     }
 }
