@@ -38,7 +38,7 @@ class CarServicingJobController extends Controller
 
         CarServicingJob::create($request->only(['car_servicing_id', 'mechanic_id', 'service_type_id']) + [
             'status'        =>  'In-Progress',
-            'description'   => 'Assigned'
+            'description'   =>  'Assigned'
         ]);
 
         return ok('Inserted Successfully');
