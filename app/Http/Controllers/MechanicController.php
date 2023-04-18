@@ -83,7 +83,6 @@ class MechanicController extends Controller
             'address2'          => 'required',
             'zip_code'          => 'required',
             'city_id'           => 'required|exists:cities,id',
-            // 'owner_id'          => 'required|exists:users,id',
             'service_type_id'   => 'required|array|exists:service_types,id'
         ]);
 
@@ -92,7 +91,7 @@ class MechanicController extends Controller
 
         $user = auth()->user();
         //find country and state based on city.
-        $city       = City::where('id', $request->city_id)->first();
+        $city       = City::findOrFail($request->city_id);
         $state      = $city->state;
         $country    = Country::findOrFail($state->country_id);
 
