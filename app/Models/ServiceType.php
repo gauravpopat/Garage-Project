@@ -9,13 +9,4 @@ class ServiceType extends Model
 {
     use HasFactory;
     protected $fillable = ['name'];
-    public function garages()
-    {
-        return $this->belongsToMany(Garage::class, 'garage_service_type');
-    }
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'user_service_type');
-    }
 }
