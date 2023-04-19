@@ -38,7 +38,7 @@ class ServiceTypeController extends Controller
         if ($validaiton->fails())
             return error('Validation Error', $validaiton->errors(), 'Validation');
 
-        $serviceType->update($request->only('name', 'state_id'));
+        $serviceType->update($request->only('name'));
         return ok('Service Type Updated Successfully.', $serviceType);
     }
 
