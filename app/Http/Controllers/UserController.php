@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ListingApiTrait;
+use Illuminate\Console\View\Components\Confirm;
 
 class UserController extends Controller
 {
@@ -16,7 +17,7 @@ class UserController extends Controller
 
     public function profile()
     {
-        $user = auth()->user();
+        $user = auth()->user()->load('cars', 'city');
         return ok('User Detail', $user);
     }
 
@@ -24,7 +25,7 @@ class UserController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'old_password'          => 'required',
-            'password'              => 'required|min:8|max:18',
+            'password'              => 'required|min:8|max:18|confirmed',
             'password_confirmation' => 'required'
         ]);
 
@@ -32,17 +33,15 @@ class UserController extends Controller
             return error('Validation Error', $validation->errors(), 'validation');
 
         $user = auth()->user();
- 
+
         if (password_verify($request->old_password, $user->password)) {
             $user->update([
                 'password'  => Hash::make($request->password)
             ]);
             return ok('Password Changed Successfully');
-        }
-        else{
+        } else {
             return error('Old Password Not Matched');
         }
-        
     }
 
     public function logout()
