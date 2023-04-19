@@ -72,7 +72,7 @@ class AuthController extends Controller
     public function resetPasswordLink(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'email' => 'required|exists:users,email'
+            'email' => 'required|email|exists:users,email'
         ]);
 
         if ($validation->fails())
@@ -129,15 +129,13 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if ($user->is_verified == true) {
-            if (Auth::attempt(['email'  =>  $request->email, 'password' => $request->password])) {
-                $token = $user->createToken('Login Token')->plainTextToken;
-                return ok('Login Successfull.', $token);
-            } else {
-                return error('Password Incorrect');
-            }
-        } else {
+        if ($user->is_verified != true)
             return error('Email not verified');
+
+        if (Auth::attempt(['email'  =>  $request->email, 'password' => $request->password])) {
+            $token = $user->createToken('Login Token')->plainTextToken;
+            return ok('Login Successfull.', $token);
         }
+        return error('Password Incorrect');
     }
 }
