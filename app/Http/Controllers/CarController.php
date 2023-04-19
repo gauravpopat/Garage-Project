@@ -43,12 +43,7 @@ class CarController extends Controller
 
     public function update($id, Request $request)
     {
-        $car = Car::findOrFail($id);
-        $carOwnerId = $car->user->id;
-
-        if (($carOwnerId != auth()->user()->id)) {
-            return error('Not your car.');
-        }
+        $car = auth()->user()->cars()->findOrFail($id);
 
         $validation = Validator::make($request->all(), [
             'company_name'          => 'required',
@@ -65,26 +60,14 @@ class CarController extends Controller
 
     public function show($id)
     {
-        $car = Car::findOrFail($id);
-        $carOwnerId = $car->user->id;
-
-        if ($carOwnerId == auth()->user()->id) {
-            return ok('Car Detail.', $car);
-        } else {
-            return error('Car Not Found');
-        }
+        $car = auth()->user()->cars()->findOrFail($id);
+        return ok('Car Detail.', $car);
     }
 
     public function delete($id)
     {
-        $car = Car::findOrFail($id);
-        $carOwnerId = $car->user->id;
-
-        if ($carOwnerId == auth()->user()->id) {
-            $car->delete();
-            return ok('Car Deleted Successfully');
-        } else {
-            return error('Car Not Found');
-        }
+        $car = auth()->user()->cars()->findOrFail($id);
+        $car->delete();
+        return ok('Car Deleted Successfully');
     }
 }
