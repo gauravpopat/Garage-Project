@@ -14,6 +14,8 @@ use App\Models\User;
 class CarServicingController extends Controller
 {
     use ListingApiTrait;
+
+    // List of garages
     public function list(Request $request)
     {
         $this->ListingValidation();
@@ -37,16 +39,11 @@ class CarServicingController extends Controller
         if ($validation->fails())
             return error('Validation Error', $validation->errors(), 'validation');
 
+        $car = auth()->user()->cars()->findOrFail($request->car_id);
+
         $car = Car::findOrFail($request->car_id);
-        $carOwnerId = $car->user->id;
-
-
-        if ($carOwnerId == auth()->user()->id) {
-            CarServicing::create($request->only(['garage_id', 'car_id', 'service_id']));
-            return ok('Car Added For Service', $car);
-        } else {
-            return error('Car Not Found');
-        }
+        CarServicing::create($request->only(['garage_id', 'car_id', 'service_id']));
+        return ok('Car Added For Service', $car);
     }
 
     public function getHistory(Request $request)
@@ -58,12 +55,9 @@ class CarServicingController extends Controller
         if ($validation->fails())
             return error('Validation Error', $validation->errors(), 'validation');
 
-        $car = Car::findOrFail($request->car_id);
-        if ($car->owner_id == auth()->user()->id) {
-            return ok('History', $car->carServicingJobs);
-        }
+        $carServicingJobs = auth()->user()->cars()->findOrFail($request->car_id)->carServicingJobs;
 
-        return error('No Any Services Found.');
+        return ok('History', $carServicingJobs);
     }
 
 
