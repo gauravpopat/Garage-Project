@@ -47,13 +47,8 @@ class CarServicingJobController extends Controller
     public function review($id)
     {
         $carServicingJob = CarServicingJob::findOrFail($id);
-        $garage = Garage::findOrFail($carServicingJob->carServicings->garage_id);
-
-        if (auth()->user()->id == $garage->owner_id) {
-            return ok('Car Servicing Job Detail', $carServicingJob);
-        }
-
-        return error('No Access!');
+        auth()->user()->garages()->findOrFail($carServicingJob->carServicings->garage_id); //if record not found it will stops here.
+        return ok('Car Servicing Job Detail', $carServicingJob);
     }
 
     public function delete($id)
