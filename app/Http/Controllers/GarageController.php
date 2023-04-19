@@ -92,14 +92,9 @@ class GarageController extends Controller
 
     public function delete($id)
     {
-        $garage = auth()->user()->garages->find($id);
-
-        if ($garage) {
-            $garage->delete();
-            return ok('Garage Deleted Successfully');
-        }
-
-        return error('No Garage Found!');
+        $garage = auth()->user()->garages()->findOrFail($id);
+        $garage->delete();
+        return ok('Garage Deleted Successfully');
     }
 
     public function show($id)
