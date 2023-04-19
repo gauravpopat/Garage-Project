@@ -60,11 +60,7 @@ class GarageController extends Controller
 
     public function update($id, Request $request)
     {
-        $garage = auth()->user()->garages->find($id);
-
-        if (!$garage) {
-            return error('No Garage Found!');
-        }
+        $garage = auth()->user()->garages()->findOrFail($id);
 
         $validation = Validator::make($request->all(), [
             'name'          => 'required|max:50',
@@ -99,12 +95,7 @@ class GarageController extends Controller
 
     public function show($id)
     {
-        $garage = auth()->user()->garages->find($id);
-
-        if ($garage) {
-            return ok('Garage Detail', $garage);
-        }
-
-        return error('No Garage Found');
+        $garage = auth()->user()->garages()->findOrFail($id);
+        return ok('Garage Detail', $garage);
     }
 }
