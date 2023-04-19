@@ -27,7 +27,7 @@ class AuthController extends Controller
             'profile_picture'       => 'required|file',
             'city_id'               => 'required|exists:cities,id',
             'service_type_id'       => 'required_if:type,Mechanic|exists:service_types,id',
-            'password'              => 'required|confirmed|min:8|max:18|',
+            'password'              => 'required|confirmed|min:8|max:18',
             'password_confirmation' => 'required'
         ]);
 
