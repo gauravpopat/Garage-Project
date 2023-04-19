@@ -59,12 +59,8 @@ class CarServicingJobController extends Controller
     public function delete($id)
     {
         $carServicingJob = CarServicingJob::findOrFail($id);
-        $garage = Garage::findOrFail($carServicingJob->carServicings->garage_id);
-
-        if (auth()->user()->id == $garage->owner_id) {
-            $carServicingJob->delete();
-            return ok('Job Deleted Successfully');
-        }
-        return error('No Access!');
+        auth()->user()->garages()->findOrFail($carServicingJob->carServicings->garage_id); //if record not found it will stops here.
+        $carServicingJob->delete();
+        return ok('Job Deleted Successfully');
     }
 }
